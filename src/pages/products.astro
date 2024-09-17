@@ -1,0 +1,40 @@
+---
+import { Debug } from "astro:components";
+import Layout from "../layouts/Layout.astro";
+import fetchApi from "../lib/strapi";
+const productsData = await fetchApi({
+    endpoint: "products",
+    wrappedByKey:"data"
+})
+const strapi_url = import.meta.env.STRAPI_URL
+const numberFormatter = new Intl.NumberFormat(undefined, {minimumFractionDigits: 2});
+---
+
+<!-- <Debug {productsData} /> -->
+
+<Layout>
+	<h1 class="mt-5">Product Catalog</h1>
+	<p class="lead">Here you can see our latest selling products</p>
+
+	<div class="row">
+        {
+            productsData.map((product)=> (
+                <div class="col-md-3">
+                    <div class="card product">
+                        <div class="card-body">
+                            <h5 class="card-title">{product.attributes.name}</h5>
+                            <img src={strapi_url+product.attributes.image.data[0].attributes.formats.medium.url} class="img-fluid">
+                            <p class="card-text"> {product.attributes.description.substr(0, 100)}... </p>
+                            <h4 class="card-text"> { numberFormatter.format(product.attributes.price) } AED </h4>
+                            <a href={"/products/"+product.attributes.slug} class="btn btn-light">Show Product</a>
+                            <button type="button" class="btn btn-primary add-to-cart ms-2" id={product.id}>Add to Cart</button>
+                        </div>
+                    </div>
+                </div>
+            ))
+        }
+	</div>
+
+</Layout>
+
+<script is:inline src="scripts/products.js"></script>
