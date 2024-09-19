@@ -1,11 +1,10 @@
+import type { APIRoute } from "astro";
 import axios from 'axios';
 
-export async function POST({params, request}) {
+export const POST: APIRoute = async ({ request }) => {
   let req = await request.json();
   let data = await req.data;
   
-  // Request API.
-  // Add your own code here to customize or restrict how the public can register new users.
   let res = await axios
   .post(`${import.meta.env.STRAPI_URL}/api/auth/local/register`, data)
   .then(response => {

@@ -1,8 +1,10 @@
+import type { APIRoute } from "astro";
 import axios from 'axios';
 
-export async function POST({params, request}) {
+export const POST: APIRoute = async ({ request, cookies }) => {
   let req = await request.json();
   let data = await req.data;
+  
   
   // Request API.
   // Add your own code here to customize or restrict how the public can register new users.
@@ -13,6 +15,9 @@ export async function POST({params, request}) {
     console.log('Well done!');
     console.log('User profile', response.data.user);
     console.log('User token', response.data.jwt);
+    cookies.set("strapi-user-name", response.data.user.username, { path: '/' })
+    cookies.set("strapi-user-token", response.data.jwt, { path: '/' })
+
     return {success: true, token: response.data.jwt};
   })
   .catch(error => {
@@ -22,4 +27,4 @@ export async function POST({params, request}) {
   });
 
   return new Response(JSON.stringify(res))
-}
+};

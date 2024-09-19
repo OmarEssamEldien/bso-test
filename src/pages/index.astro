@@ -1,20 +1,39 @@
 ---
 import Layout from "../layouts/Layout.astro";
+const loggedIn = Astro.cookies.has("strapi-user-name");
 ---
 
 <Layout>
 	<h1 class="mt-5">Welcome to BSO</h1>
 	<p class="lead">This is a Test Assignment for The Full Stack Job Position</p>
 
+	{
+		loggedIn ?
+		<p>Hi, {Astro.cookies.get("strapi-user-name")?.value}</p>
+		:
+		<p>Login to Show Cart</p>
+	}
+	
 	<div class="row">
 		<div class="col-md-4">
-			<div class="card">
-				<div class="card-body">
-					<h5 class="card-title">Login</h5>
-					<p class="card-text"> Lorem ipsum dolor sit amet consectetur adipisicing elit. Maiores ipsa, quod totam repellendus reiciendis nobis? </p>
-					<a href="/login" class="btn btn-primary">Go to Login</a>
+			{
+				loggedIn ?
+				<div class="card">
+					<div class="card-body">
+						<h5 class="card-title">Cart</h5>
+						<p class="card-text"> Lorem ipsum dolor sit amet consectetur adipisicing elit. Maiores ipsa, quod totam repellendus reiciendis nobis? </p>
+						<a href="/cart" class="btn btn-primary">Go to My Cart</a>
+					</div>
 				</div>
-			</div>
+				:
+				<div class="card">
+					<div class="card-body">
+						<h5 class="card-title">Login</h5>
+						<p class="card-text"> Lorem ipsum dolor sit amet consectetur adipisicing elit. Maiores ipsa, quod totam repellendus reiciendis nobis? </p>
+						<a href="/login" class="btn btn-primary">Go to Login</a>
+					</div>
+				</div>
+			}
 		</div>
 		<div class="col-md-4">
 			<div class="card">
